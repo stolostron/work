@@ -21,7 +21,7 @@ You can reach the maintainers of this project at:
 Work agent is a controller running on the managed cluster. It watches the `ManifestWorks` CRs in a certian namespace on hub cluster and applies the manifests included in those CRs on the managed clusters.
 
 ### Work webhook
-Work webhook is an addmission webhook running on hub cluster to ensure the content of `ManifestWorks` created/updated are valid.
+Work webhook is an addmission webhook running on hub cluster. It ensures the content of `ManifestWorks` created/updated are valid.
 
 ## Getting Started
 
