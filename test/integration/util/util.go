@@ -1,6 +1,7 @@
 package util
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/onsi/ginkgo"
@@ -139,6 +140,10 @@ func (r *IntegrationTestEventRecorder) Warning(reason, message string) {
 
 func (r *IntegrationTestEventRecorder) Warningf(reason, messageFmt string, args ...interface{}) {
 	r.Warning(reason, fmt.Sprintf(messageFmt, args...))
+}
+
+func (r *IntegrationTestEventRecorder) WithContext(ctx context.Context) events.Recorder {
+	return r
 }
 
 func (r *IntegrationTestEventRecorder) Shutdown() {
