@@ -2,7 +2,10 @@ module github.com/open-cluster-management/work
 
 go 1.14
 
-replace github.com/googleapis/gnostic => github.com/googleapis/gnostic v0.4.1 // ensure compatible between controller-runtime and kube-openapi
+replace (
+	github.com/googleapis/gnostic => github.com/googleapis/gnostic v0.4.1 // ensure compatible between controller-runtime and kube-openapi
+	github.com/open-cluster-management/api => open-cluster-management.io/api v0.0.0-20200902123524-a932fbe34f12
+)
 
 require (
 	github.com/davecgh/go-spew v1.1.1
