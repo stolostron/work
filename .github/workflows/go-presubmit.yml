@@ -6,12 +6,12 @@ on:
     branches:
       - main
       - release-*
+      - backplane-*
 
 env:
   # Common versions
   GO_VERSION: '1.19'
   GO_REQUIRED_MIN_VERSION: ''
-  GOPATH: '/home/runner/work/work/work/go'
 defaults:
   run:
     working-directory: go/src/open-cluster-management.io/work
@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 1
           path: go/src/open-cluster-management.io/work
@@ -38,7 +38,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 1
           path: go/src/open-cluster-management.io/work
@@ -54,7 +54,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 1
           path: go/src/open-cluster-management.io/work
@@ -70,7 +70,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 1
           path: go/src/open-cluster-management.io/work
@@ -86,7 +86,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 1
           path: go/src/open-cluster-management.io/work
@@ -102,7 +102,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 1
           path: go/src/open-cluster-management.io/work
@@ -111,18 +111,25 @@ jobs:
         with:
           go-version: ${{ env.GO_VERSION }}
       - name: install imagebuilder
-        run: go install github.com/openshift/imagebuilder/cmd/imagebuilder@v1.2.1
+        run: go install github.com/openshift/imagebuilder/cmd/imagebuilder@v1.2.3
       - name: images
         run: make images
+        env:
+          IMAGE_REGISTRY: quay.io/stolostron
+          IMAGE_TAG: e2e
       - name: setup kind
         uses: engineerd/setup-kind@v0.5.0
         with:
-          version: v0.11.1
+          version: v0.17.0
       - name: Load image on the nodes of the cluster
-        run: |
-          kind load docker-image --name=kind quay.io/open-cluster-management/work:latest
+        run: kind load docker-image --name=kind ${IMAGE_REGISTRY}/work:${IMAGE_TAG}
+        env:
+          IMAGE_REGISTRY: quay.io/stolostron
+          IMAGE_TAG: e2e
       - name: Run e2e test
-        run: |
-          make test-e2e
+        run: make test-e2e
         env:
           KUBECONFIG: /home/runner/.kube/config
+          IMAGE_REGISTRY: quay.io/stolostron
+          IMAGE_TAG: e2e
+          IMAGE_NAME: quay.io/stolostron/work:e2e
